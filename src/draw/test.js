@@ -5,6 +5,7 @@ import {
   Spritesheet,
   Texture,
   Sprite,
+  TilingSprite,
 } from "pixi.js"
 import atlasData from "@/assets/spritesheets/pieces-spritesheet.json"
 
@@ -16,6 +17,7 @@ const load = async () => {
   return Promise.all([
     Assets.load(`${base}/assets/fonts/OpenSans-Medium.ttf`),
     Assets.load(`${base}/assets/spritesheets/pieces-spritesheet.png`),
+    Assets.load(`${base}/assets/images/circuitboard.png`),
   ])
 }
 
@@ -42,12 +44,25 @@ const sprites = async () => {
   return spritesheet
 }
 
+const createBackground = (app) => {
+  const circuitboardTexture = Texture.from(`${base}/assets/images/circuitboard.png`)
+  const tilingSprite = new TilingSprite({
+    texture: circuitboardTexture,
+    width: app.screen.width,
+    height: app.screen.height,
+  })
+  app.stage.addChild(tilingSprite)
+  return tilingSprite
+}
+
 export const test = async () => {
   const app = new Application()
   await app.init({ background: "#000000", resizeTo: window })
   document.body.appendChild(app.canvas)
 
   await load()
+
+  createBackground(app)
 
   drawText(app)
   const spritesheet = await sprites()
